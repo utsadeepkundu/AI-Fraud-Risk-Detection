@@ -4,6 +4,7 @@ import {
   Route,
 } from "react-router-dom";
 
+import Signup from "./pages/Signup";
 import Sidebar from "./components/Sidebar";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -63,6 +64,11 @@ function App() {
         <Route
           path="/login"
           element={<Login />}
+        />
+
+        <Route
+          path="/signup"
+          element={<Signup />}
         />
 
         {/* Protected dashboard */}

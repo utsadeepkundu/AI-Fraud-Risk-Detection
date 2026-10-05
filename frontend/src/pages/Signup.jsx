@@ -2,12 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 
-function Login() {
+function Signup() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -28,18 +30,33 @@ function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     setError("");
 
-    if (!formData.email.trim() || !formData.password) {
-      setError("Please enter your email and password.");
+    if (
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      setError("Password must contain at least 8 characters.");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
       return;
     }
 
     try {
       setLoading(true);
 
-      const response = await api.post("/api/auth/login", {
+      const response = await api.post("/api/auth/register", {
+        name: formData.name.trim(),
         email: formData.email.trim(),
         password: formData.password,
       });
@@ -51,7 +68,7 @@ function Login() {
     } catch (err) {
       const message =
         err.response?.data?.detail ||
-        "Unable to sign in. Please check your credentials.";
+        "Unable to create your account. Please try again.";
 
       setError(message);
     } finally {
@@ -84,19 +101,19 @@ function Login() {
 
       <main className="login-main">
         <section className="login-info">
-          <div className="login-eyebrow">AI-POWERED RISK DETECTION</div>
+          <div className="login-eyebrow">JOIN NOVARISK</div>
 
           <h1>
-            Detect risk.
+            Start
             <br />
-            Protect every
+            protecting
             <br />
-            <span>transaction.</span>
+            <span>every transaction.</span>
           </h1>
 
           <p>
-            Sign in to access intelligent fraud analysis, risk scoring,
-            transaction monitoring and explainable AI insights.
+            Create your NovaRisk account to access AI-powered fraud analysis,
+            transaction monitoring, risk analytics and explainable insights.
           </p>
 
           <div className="login-feature-list">
@@ -120,7 +137,7 @@ function Login() {
               <div className="login-feature-icon">✓</div>
               <div>
                 <strong>Real-time monitoring</strong>
-                <span>Alerts, analytics and history</span>
+                <span>Alerts, analytics and transaction history</span>
               </div>
             </div>
           </div>
@@ -139,14 +156,14 @@ function Login() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <rect x="4" y="10" width="16" height="11" rx="2" />
-                <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
               </svg>
             </div>
 
             <div>
-              <h2>Welcome back</h2>
-              <p>Sign in to your NovaRisk account</p>
+              <h2>Create your account</h2>
+              <p>Set up your NovaRisk analyst account</p>
             </div>
           </div>
 
@@ -158,6 +175,38 @@ function Login() {
           )}
 
           <form onSubmit={handleSubmit} className="login-form">
+            <div className="login-field">
+              <label htmlFor="name">Full name</label>
+
+              <div className="login-input-wrapper">
+                <svg
+                  className="login-input-icon"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M20 21a8 8 0 0 0-16 0" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Your full name"
+                  autoComplete="name"
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
             <div className="login-field">
               <label htmlFor="email">Email address</label>
 
@@ -215,8 +264,40 @@ function Login() {
                   type="password"
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="Enter your password"
-                  autoComplete="current-password"
+                  placeholder="Minimum 8 characters"
+                  autoComplete="new-password"
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <div className="login-field">
+              <label htmlFor="confirmPassword">Confirm password</label>
+
+              <div className="login-input-wrapper">
+                <svg
+                  className="login-input-icon"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="4" y="10" width="16" height="11" rx="2" />
+                  <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                </svg>
+
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Re-enter your password"
+                  autoComplete="new-password"
                   disabled={loading}
                 />
               </div>
@@ -230,11 +311,11 @@ function Login() {
               {loading ? (
                 <>
                   <span className="login-spinner"></span>
-                  Signing in...
+                  Creating account...
                 </>
               ) : (
                 <>
-                  Sign In
+                  Create Account
                   <span className="login-arrow">→</span>
                 </>
               )}
@@ -242,35 +323,17 @@ function Login() {
           </form>
 
           <div className="login-divider">
-            <span>Protected access</span>
+            <span>Already registered?</span>
           </div>
 
-          <div className="login-trust">
-            <div className="login-trust-item">
-              <span>●</span>
-              JWT Authentication
-            </div>
-
-            <div className="login-trust-item">
-              <span>●</span>
-              Secure API
-            </div>
-
-            <div className="login-trust-item">
-              <span>●</span>
-              MongoDB Atlas
-            </div>
-          </div>
-
-          <div className="login-signup-prompt">
-  <span>Don't have an account?</span>
-  <button
-    type="button"
-    onClick={() => navigate("/signup")}
-  >
-    Create an account
-  </button>
-</div>
+          <button
+            type="button"
+            className="signup-back-button"
+            onClick={() => navigate("/login")}
+            disabled={loading}
+          >
+            Back to Sign In
+          </button>
         </section>
       </main>
 
@@ -281,4 +344,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;

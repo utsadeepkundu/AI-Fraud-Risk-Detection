@@ -2134,3 +2134,50 @@ button:disabled {
     border-radius: 18px;
   }
 }
+.login-signup-prompt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-top: 18px;
+  color: #7d8998;
+  font-size: 11px;
+}
+
+.login-signup-prompt button {
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: #2563eb;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.login-signup-prompt button:hover {
+  text-decoration: underline;
+}
+
+.signup-back-button {
+  width: 100%;
+  height: 45px;
+  border: 1px solid #dbe3ec;
+  border-radius: 11px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.signup-back-button:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+  background: #f8fbff;
+}
+
+.signup-back-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
