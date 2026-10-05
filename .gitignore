@@ -1,26 +1,64 @@
+# =========================
 # Python
+# =========================
 __pycache__/
 *.py[cod]
+*$py.class
+
+# Python virtual environments
 venv/
+.venv/
+env/
+ENV/
+
+# Python packaging
+*.egg-info/
+build/
+dist/
+
+# =========================
+# Environment / Secrets
+# =========================
 .env
+.env.*
+!.env.example
 
-# ML
-*.pkl
-*.joblib
-*.h5
-*.keras
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
 
-# Node
-frontend/node_modules/
+# =========================
+# Node / React / Vite
+# =========================
+node_modules/
 frontend/dist/
+frontend/.vite/
 
-# IDE
-.vscode/
-.idea/
+# =========================
+# Logs
+# =========================
+*.log
 
-# OS
+# =========================
+# OS generated files
+# =========================
 .DS_Store
 Thumbs.db
 
-# Vercel
-.vercel/
+# =========================
+# IDE
+# =========================
+.idea/
+.vscode/
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.temp
+# =========================
+# Datasets
+# =========================
+Downloaded_Dataset/
+ml/data/raw/
